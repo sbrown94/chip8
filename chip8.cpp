@@ -1,4 +1,6 @@
 #include "chip8.h"
+#include <stdio.h>
+using namespace std;
 
 chip8::chip8()
 {
@@ -71,27 +73,34 @@ void chip8::cycle()
 		
 		case 0x2000: 				// 0x2NNN Call subroutine at NNN
 			stack[sp] = pc; 		// store current location in the stack
-			sp++ 					// incrememnt stack pointer
+			sp++; 					// incrememnt stack pointer
 			pc = opcode & 0x0FFF; 	// go to address
 		break;
 		
-		case 0x3XNN: // Skip next instruction if Vx = NN
+		case 0x3000: // 3XNN / Skip next instruction if Vx = NN
 			if (V[(opcode & 0x0F00) >> 8] == (opcode & 0x00FF))
 				pc += 4;
 			else
 				pc += 2;
+		break;
 				
-		case 0x4XNN: // Skip next instruction if Vx != NN
+		case 0x4000: // 4XNN / Skip next instruction if Vx != NN
 			if (V[(opcode & 0x0F00) >> 8] != (opcode & 0x00FF))
 				pc += 4;
 			else
 				pc += 2;
+		break;
+
+		case 0x5000: // 5XY0 / Skip next instruction if VX = VY
+			if (V[(opcode & 0xF000) >> 8)] == V[(opcode & 0x0F00) >> 8)]
+				pc += 4;
+			else
+				pc +=2;
+
+		case 0x6000:
+
 	}
 }
-
-
-
-
 
 
 
